@@ -23,6 +23,7 @@ MULTIREGION_IAM_DEMO() {
   sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
   chmod +x crdb-multi-region-iam-demo/demo.py
+  chmod +x crdb-multi-region-iam-demo/setup-demo.sh
 
 }
 BASHRC
