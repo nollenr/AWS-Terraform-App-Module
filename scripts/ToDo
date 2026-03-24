@@ -1,0 +1,6 @@
+From the Cluster UI, the following needs to happen
+
+Get the connection string for the iam_demo in the apppriate region
+Add the network for the app servers
+Download the certificates
+
