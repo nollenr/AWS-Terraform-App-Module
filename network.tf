@@ -2,7 +2,7 @@
 # Create VPC, IGW, subnets (public and private),  route tables (public and private) and routes.
 # -----------------------------------------------------------------------
 resource "aws_vpc" "main" {
-  cidr_block = var.vpc_cidr
+  cidr_block = var.cluster_info["region"].vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support = true
   tags = merge(local.tags, {Name = "${var.owner}-${var.project_name}-vpc"})
@@ -129,16 +129,27 @@ module "security-group-02" {
   vpc_id = aws_vpc.main.id
 }
 
-# # AWS Network Interfaces - 1 Per CRDB Node
-# # I need all of the private IP addresses before creating the nodes
-# # so that I can assemble the join string and set up ssh between the nodes
-# resource "aws_network_interface" "crdb" {
-#   tags                  = local.tags
-#   count                 = var.crdb_nodes
-#   subnet_id             = aws_subnet.public_subnets[count.index % 3].id
-#   # when creating network interfaces, the security group must go here, not in the instance config
-#   security_groups = [module.security-group-02.security_group_id, module.security-group-01.security_group_id]
-# }
+# AWS Network Interfaces - 1 Per app Node
+# I need all of the private IP addresses before creating the nodes
+# so that I can assemble the join string and set up ssh between the nodes
+resource "aws_network_interface" "app" {
+  tags                  = local.tags
+  count                 = var.create_ec2_instances == "yes" ? 1 : 0
+  subnet_id             = aws_subnet.public_subnets[count.index % 3].id
+  # when creating network interfaces, the security group must go here, not in the instance config
+  security_groups = [module.security-group-02.security_group_id, module.security-group-01.security_group_id]
+}
+
+# This object map allows me to look up the information stored on the subnet_map in ther instance resource
+locals {
+  interface_map = { for i, interface in aws_network_interface.app :
+    interface.id => {
+      id   = interface.id
+      subnet_id = interface.subnet_id
+      private_ip = interface.private_ip
+    }
+  }
+}
 
 locals {
   subnet_az_map = {

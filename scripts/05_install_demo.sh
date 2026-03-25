@@ -1,7 +1,14 @@
-ADMIN_HOME="/home/ec2-user"
+ADMIN_HOME="/home/${admin_user}"
 
 # Define the demo install function
 cat >> "$ADMIN_HOME/.bashrc" <<'BASHRC'
+export CRDB_CERT_URL="${database_connection_string}"
+export DATABASE_REGIONS="${database_regions}"
+%{ if app_private_ip_list != "" ~}
+export APP_PRIVATE_IP_LIST="${app_private_ip_list}"
+export APP_PUBLIC_IP_LIST="${app_public_ip_list}"
+%{ endif ~}
+
 MULTIREGION_IAM_DEMO() {
 
   sudo yum install -y gcc gcc-c++ libpq-devel

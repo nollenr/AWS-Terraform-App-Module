@@ -1,13 +1,4 @@
 # ----------------------------------------
-# CIDR
-# ----------------------------------------
-    variable "vpc_cidr" {
-      description = "CIDR block for the VPC"
-      type        = string
-      default     = "192.168.4.0/24"
-    }
-
-# ----------------------------------------
 # TAGS
 # ----------------------------------------
     # Required tags
@@ -63,11 +54,6 @@
     description = "App Instance Type"
     type        = string
     default     = "t3a.micro"
-  }
-  variable "instance_key_name" {
-    description = "The key name to use for the instance -- this key must already exist"
-    type        = string
-    nullable    = false
   }
   variable "crdb_version" {
     description = "CockroachDB Version"
@@ -136,3 +122,27 @@
     type        = string
     default     = ""
   }
+
+
+variable "cluster_info" {
+  description = "Cluster configuration for each region"
+  type = map(object({
+    database_region_name       = string
+    aws_region_name            = string
+    database_connection_string = string
+    aws_instance_key           = string
+    vpc_cidr                   = string
+  }))
+}
+
+# ----------------------------------------
+# Other App Nodes (for multi-region setup)
+# ----------------------------------------
+variable "other_app_nodes" {
+  description = "List of other app nodes' IP addresses (for multi-region primary node)"
+  type = list(object({
+    private_ip = string
+    public_ip  = string
+  }))
+  default = []
+}
