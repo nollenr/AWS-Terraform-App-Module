@@ -76,6 +76,11 @@
     type = list
     default = ["us-east-2", "us-west-2", "us-east-1"]
   }
+  variable "crdb_region_list" {
+    description = "list of the AWS regions for the crdb cluster"
+    type = list
+    default = ["us-east-2", "us-west-2", "us-east-1"]
+  }
 
 # ----------------------------------------
 # Demo

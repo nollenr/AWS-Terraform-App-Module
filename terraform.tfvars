@@ -17,3 +17,4 @@ cluster_info = {
 }
 
 other_app_nodes = []
+crdb_region_list = []
