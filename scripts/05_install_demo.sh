@@ -31,6 +31,7 @@ MULTIREGION_IAM_DEMO() {
   sudo chmod +x /usr/local/bin/docker-compose
   chmod +x crdb-multi-region-iam-demo/demo.py
   chmod +x crdb-multi-region-iam-demo/setup-demo.sh
+  chmod +x crdb-multi-region-iam-demo/disrupt.sh
 
 }
 BASHRC
