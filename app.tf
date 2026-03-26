@@ -39,7 +39,7 @@ user_data = join("\n", [
     include_demo               = var.include_demo  # "yes" or "no"
     database_connection_string = var.cluster_info["region"].database_connection_string
     database_regions           = join(",", var.crdb_region_list)
-    app_private_ip_list = length(var.other_app_nodes) > 0 ? join(",", concat([for node in var.other_app_nodes : node.private_ip], [aws_network_interface.app[count.index].private_ip])) : ""
+    app_private_ip_list = length(var.other_app_nodes) > 0 ? join(",", concat([aws_network_interface.app[count.index].private_ip], [for node in var.other_app_nodes : node.private_ip])) : ""
     app_public_ip_list  = join(",", [for node in var.other_app_nodes : node.public_ip])
   }),
 ])
