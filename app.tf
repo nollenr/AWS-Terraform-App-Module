@@ -42,5 +42,9 @@ user_data = join("\n", [
     app_private_ip_list = length(var.other_app_nodes) > 0 ? join(",", concat([aws_network_interface.app[count.index].private_ip], [for node in var.other_app_nodes : node.private_ip])) : ""
     app_public_ip_list  = join(",", [for node in var.other_app_nodes : node.public_ip])
   }),
+  # 6) Install CRDB Function (adds CRDB() to admin's .bashrc)
+  templatefile("${path.module}/scripts/06_install_crdb_function.sh", {
+    admin_user                 = local.admin_username
+  }),
 ])
 }
